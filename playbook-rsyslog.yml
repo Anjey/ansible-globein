@@ -1,0 +1,9 @@
+---
+- name: Copy and restart rsyslog
+  hosts: 
+    tag_Name_DEV_Blog
+    tag_Name_DEV_WebServer
+  become: yes
+
+  roles:
+          - rsyslog

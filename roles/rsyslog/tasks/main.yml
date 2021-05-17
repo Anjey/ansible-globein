@@ -1,0 +1,14 @@
+---
+- block: #==========For Blog===========
+    - name: Copy file rsyslog for blog
+      copy: src=rsyslog_blog.conf dest={{ dest_folder }}/60-graylog.conf owner=root group=root mode=0644
+      notify: Restart rsyslog
+      register: file
+  when: ansible_nodename | regex_search("dev-blog-*")
+
+
+- block: #==========For WebServer===========
+    - name: Copy file rsyslog for webservers
+      copy: src=rsyslog_webserver.conf dest={{ dest_folder }}/60-graylog.conf owner=root group=root mode=0644
+      notify: Restart rsyslog
+  when: ansible_nodename | regex_search("dev-webserver-*")

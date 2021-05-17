@@ -1,0 +1,11 @@
+---
+- name: Ping
+  hosts: 
+    tag_Name_DEV_Blog
+    tag_Name_DEV_WebServer
+  become: yes
+
+  tasks:
+         - name: Test ping
+           shell: uptime
+           when: ansible_nodename == "dev-*"
