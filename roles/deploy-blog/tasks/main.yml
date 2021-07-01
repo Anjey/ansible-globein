@@ -1,0 +1,59 @@
+---
+# tasks file for deploy-blog
+    - name: create temp directory
+      tempfile:
+        state: directory
+        prefix: blog
+      delegate_to: localhost
+      become: no
+      register: temp_dir_blog
+
+    - name: show path
+      debug: 
+        var: temp_dir_blog
+
+      - name: git clone
+         git:
+           repo:
+           dest:
+           version: branch
+         tags:
+           - deploy
+           - gitpull
+      
+    - name: create file
+      copy:
+          content: |
+                  deploy is success
+                  line2 in file 1
+                  serverr is {{ ansible_hostname }}
+          dest: "{{ temp_dir_blog.path }}/test.txt"
+      delegate_to: localhost
+    
+
+    - name: create file2
+      copy:
+          content: |
+                  file2.txt
+                  line 2 in fille 2
+                  server is {{ ansible_hostname }}
+          dest: "{{ temp_dir_blog.path }}/test2.txt"
+      delegate_to: localhost
+    
+    - name: rsync file
+      shell: rsync -avhz  {{ temp_dir_blog.path }}/ {{ dest_dir }} --chown=ubuntu:www-data --exclude=test2.txt
+      delegate_to: localhost
+      #      synchronize:
+      #              src: "{{ temp_dir_blog.path }}/"
+      #              dest: "{{ dest_dir }}"
+      #              mode: push
+      #              recursive: yes
+      #
+    - name: delete temp directory
+      file:
+        path: "{{ temp_dir_blog.path }}"
+        state: absent
+      delegate_to: localhost
+
+
+

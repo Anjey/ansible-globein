@@ -1,0 +1,9 @@
+---
+- name: Dev-Blog Deploy
+  hosts: 
+   tag_Name_DEV_Blog
+   localhost
+  become: yes
+
+  roles:
+     - deploy-blog
